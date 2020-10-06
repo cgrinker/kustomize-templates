@@ -11,5 +11,6 @@ kind create cluster --config cluster.yaml
 docker network connect "kind" "${reg_name}"
 
 for node in $(kind get nodes); do
-  kubectl annotate node "${node}" "kind.x-k8s.io/registry=localhost:${reg_port}";
+  kubectl annotate node "${node}" "kind.x-k8s.io/registry=localhost:5000"
 done
+

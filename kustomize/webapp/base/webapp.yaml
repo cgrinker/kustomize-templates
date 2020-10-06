@@ -1,25 +1,30 @@
-kind: Pod
-apiVersion: v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: webapp
 spec:
-  containers:
-  - name: webapp
-    image: hashicorp/http-echo:0.2.3
-    args:
-    - "-listen=:80"
-    - "-text=webapp"
-    resources:
-          requests:
-              memory: "512Mi"
-              cpu: "500m"
-          limits:
-              memory: "512Mi"
-              cpu: "500m"
-    livenessProbe:
-      httpGet:
-        path: /
-        port: 80
+  replicas: 1
+  selector:
+    matchLabels: {}
+  template:
+    spec:
+      containers:
+      - name: webapp
+        image: hashicorp/http-echo:0.2.3
+        args:
+        - "-listen=:80"
+        - "-text=webapp"
+        resources:
+              requests:
+                  memory: "512Mi"
+                  cpu: "500m"
+              limits:
+                  memory: "512Mi"
+                  cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
 ---
 kind: Service
 apiVersion: v1

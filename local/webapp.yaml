@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {}
+  template:
+    spec:
+      containers:
+      - name: webapp
+        image: localhost:5000/http-echo:0.2.3
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: webapp
+spec:
+  tls: 
+  - hosts:
+    - webapp.localhost
+    secretName: local-webapp-cert
+  rules:
+  - host: webapp.localhost 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: webapp
+          servicePort: 80
