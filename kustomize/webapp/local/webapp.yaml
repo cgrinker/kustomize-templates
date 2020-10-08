@@ -21,7 +21,7 @@ spec:
   tls: 
   - hosts:
     - webapp.localhost
-    secretName: local-webapp-cert
+    secretName: webapp-cert
   rules:
   - host: webapp.localhost 
     http:
