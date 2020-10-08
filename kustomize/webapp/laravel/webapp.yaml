@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {}
+  template:
+    spec:
+      containers:
+        - name: webapp
+          image: localhost:5000/laravel/dev
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: data
+            - mountPath: /root/.ssh
+              name: ssh-keys
+          livenessProbe:
+            httpGet:
+              path: /robots.txt
+              port: 80
+      volumes:
+          - name: ssh-keys
+            secret:
+                  secretName: ssh-keys
+                  defaultMode: 0400
+          - name: data
+            persistentVolumeClaim:
+                  claimName: laravel-dev
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: webapp
+spec:
+  tls: 
+  - hosts:
+    - laravel.localhost
+    secretName: laravel-webapp-cert
+  rules:
+  - host: laravel.localhost 
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: webapp
+          servicePort: 80

@@ -10,10 +10,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: hashicorp/http-echo:0.2.3
-        args:
-        - "-listen=:80"
-        - "-text=webapp"
+        image: nginx
         resources:
               requests:
                   memory: "512Mi"
